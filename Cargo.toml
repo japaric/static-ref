@@ -1,0 +1,6 @@
+[package]
+authors = ["Jorge Aparicio <japaricious@gmail.com>"]
+name = "static-ref"
+version = "0.1.0"
+
+[dependencies]
