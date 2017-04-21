@@ -1,6 +1,11 @@
 [package]
-authors = ["Jorge Aparicio <japaricious@gmail.com>"]
+authors = ["Jorge Aparicio <jorge@japaric.io>"]
+description = "References that point into `static` data"
+documentation = "https://docs.rs/static-ref"
+keywords = ["no-std", "invariant"]
+license = "MIT OR Apache-2.0"
 name = "static-ref"
+repository = "https://github.com/japaric/static-ref"
 version = "0.1.0"
 
 [dependencies]
