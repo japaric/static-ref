@@ -14,13 +14,20 @@ unsafe impl<'a, T> StaticRef<T> for RefMut<'a, T> {}
 unsafe impl<T> StaticRef<T> for &'static T {}
 
 /// `&'a T` that points into `static` data
-#[derive(Clone, Copy)]
 pub struct Ref<'a, T>
 where
     T: 'static,
 {
     ref_: &'a T,
 }
+
+impl<'a, T> Clone for Ref<'a, T> {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+
+impl<'a, T> Copy for Ref<'a, T> {}
 
 impl<'a, T> Ref<'a, T> {
     /// Asserts that `ref_` points into `static` data
