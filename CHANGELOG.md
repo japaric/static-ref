@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [v0.2.0] - 2017-06-27
+
+### Changed
+
+- [breaking-change] `Ref` and `RefMut` have been dropped in favor of the
+  `Static` newtype. `&'a Static<T>` is equivalent to `Ref<'a, T>` and `&'a mut
+  Static<T>` is equivalent to `RefMut<'a, T>`. `Static<T>` supports dynamically
+  sized types (`T: ?Sized`)
+
+### Removed
+
+- The `StaticRef` trait
+
 ## [v0.1.1] - 2017-06-16
 
 ### Fixed
@@ -19,5 +32,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Initial version
 
-[Unreleased]: https://github.com/japaric/static-ref/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/japaric/static-ref/compare/v0.2.0...HEAD
+[v0.2.0]: https://github.com/japaric/static-ref/compare/v0.1.1...v0.2.0
 [v0.1.1]: https://github.com/japaric/static-ref/compare/v0.1.0...v0.1.1

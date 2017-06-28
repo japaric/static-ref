@@ -6,6 +6,6 @@ keywords = ["no-std", "invariant"]
 license = "MIT OR Apache-2.0"
 name = "static-ref"
 repository = "https://github.com/japaric/static-ref"
-version = "0.1.1"
+version = "0.2.0"
 
 [dependencies]

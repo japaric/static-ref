@@ -2,73 +2,49 @@
 
 #![deny(missing_docs)]
 #![deny(warnings)]
+#![feature(const_fn)]
 #![no_std]
 
-use core::ops;
+use core::{mem, ops};
 
-/// A reference that points into `static` data
-pub unsafe trait StaticRef<T>: ops::Deref<Target = T> {}
-
-unsafe impl<'a, T> StaticRef<T> for Ref<'a, T> {}
-unsafe impl<'a, T> StaticRef<T> for RefMut<'a, T> {}
-unsafe impl<T> StaticRef<T> for &'static T {}
-
-/// `&'a T` that points into `static` data
-pub struct Ref<'a, T>
+/// A value stored in a `static` variable
+#[repr(C)]
+pub struct Static<T>
 where
-    T: 'static,
+    T: ?Sized,
 {
-    ref_: &'a T,
+    data: T,
 }
 
-impl<'a, T> Clone for Ref<'a, T> {
-    fn clone(&self) -> Self {
-        *self
+impl<T> Static<T> {
+    /// Asserts that this `value` is stored in a `static` variable
+    pub const unsafe fn new(value: T) -> Self {
+        Static { data: value }
+    }
+
+    /// Asserts that the reference `r` points to data stored in a `static`
+    /// variable
+    pub unsafe fn ref_<'a>(r: &'a T) -> &'a Static<T> {
+        mem::transmute(r)
+    }
+
+    /// Asserts that the reference `r` points to data stored in a `static`
+    /// variable
+    pub unsafe fn ref_mut<'a>(r: &'a mut T) -> &'a mut Static<T> {
+        mem::transmute(r)
     }
 }
 
-impl<'a, T> Copy for Ref<'a, T> {}
-
-impl<'a, T> Ref<'a, T> {
-    /// Asserts that `ref_` points into `static` data
-    pub unsafe fn new(ref_: &'a T) -> Self {
-        Ref { ref_: ref_ }
-    }
-}
-
-impl<'a, T> ops::Deref for Ref<'a, T> {
+impl<T> ops::Deref for Static<T> {
     type Target = T;
 
     fn deref(&self) -> &T {
-        self.ref_
+        &self.data
     }
 }
 
-/// `&'a mut T` that points into `static` data
-pub struct RefMut<'a, T>
-where
-    T: 'static,
-{
-    ref_mut: &'a mut T,
-}
-
-impl<'a, T> RefMut<'a, T> {
-    /// Asserts that `ref_mut` points into `static` data
-    pub unsafe fn new(ref_mut: &'a mut T) -> Self {
-        RefMut { ref_mut: ref_mut }
-    }
-}
-
-impl<'a, T> ops::Deref for RefMut<'a, T> {
-    type Target = T;
-
-    fn deref(&self) -> &T {
-        self.ref_mut
-    }
-}
-
-impl<'a, T> ops::DerefMut for RefMut<'a, T> {
+impl<T> ops::DerefMut for Static<T> {
     fn deref_mut(&mut self) -> &mut T {
-        self.ref_mut
+        &mut self.data
     }
 }
