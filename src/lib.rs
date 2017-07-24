@@ -33,6 +33,16 @@ impl<T> Static<T> {
     pub unsafe fn ref_mut<'a>(r: &'a mut T) -> &'a mut Static<T> {
         mem::transmute(r)
     }
+
+    /// Wraps a static reference into `Static`
+    pub fn wrap(r: &'static T) -> &'static Static<T> {
+        unsafe { mem::transmute(r) }
+    }
+
+    /// Wraps a mutable static reference into `Static`
+    pub fn wrap_mut(r: &'static mut T) -> &'static mut Static<T> {
+        unsafe { mem::transmute(r) }
+    }
 }
 
 impl<T> ops::Deref for Static<T> {
